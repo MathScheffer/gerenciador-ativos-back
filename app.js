@@ -1,59 +1,32 @@
-/* const express = require("express")
-const app = express()
-const port = 3000
+var express = require("express")
+var bodyParser = require("body-parser")
+var app = express()
+var mqttHandler = require("./mqttHandler")
 
-app.get("/", (req, res) => {
-  res.send("Hello World!")
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+var mqttHandler = new mqttHandler()
+mqttHandler.connect()
+
+mqttHandler.mqttClient.on("message", (topic, payload) => {
+  switch (topic) {
+    case "Teste":
+      console.log("Vai executar a request")
+      break
+    case "Teste2":
+      console.log("Agora, vai posta para o front consumir")
+      break
+    default:
+      console.log("Não foi nenhum dos dois tópicos.")
+  }
+})
+// Routes
+app.post("/send-mqtt", function (req, res) {
+  mqttHandler.sendMessage(JSON.stringify(req.body))
+  res.status(201).send("Message sent to mqtt")
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+var server = app.listen(3000, function () {
+  console.log("app running on port.", server.address().port)
 })
- */
-require("dotenv").config()
-const { WebSocket } = require("ws")
-
-const wss = new WebSocket.Server({
-  port: process.env.PORT,
-})
-
-const broadcast = (server, jsonObject) => {
-  //this.clients é pega dentro do servidor já ativo, pois esta função será colocada lá.
-  if (!server.clients) return
-  server.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      //envia para o cliente o jsonObj
-      client.send(JSON.stringify(jsonObject))
-    }
-  })
-}
-const onMessage = (ws, data) => {
-  console.log(data.toString())
-
-  //Quando usamos o cliente, mandamos para o websocket dele a mensagem!
-  ws.send("Sua mensagem foi recebida!")
-}
-
-const onError = (err) => {
-  console.error(err)
-}
-// eventos
-wss.on(
-  "connection",
-  //ws = canal de comunicação (conexao com o cliente)
-  //req = objeto da requisição, sendo possível acessar headers, ips, etc
-  (onConnection = (ws, req) => {
-    const ip = req.socket.remoteAddress
-    console.log(`Usuario ${ip} conectado`)
-    //cada vez que o cliente disparar o evento message...
-    ws.on("message", (data) => onMessage(ws, data))
-    ws.on("error", (error) => onError(error))
-  })
-)
-
-wss.broadcast = (obj) => broadcast(wss, obj)
-
-setInterval(() => {
-  wss.broadcast({ time: new Date() })
-}, 5000)
-console.log(`Websocket server running on ${process.env.PORT}`)
