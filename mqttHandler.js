@@ -28,8 +28,8 @@ class MqttHandler {
     })
 
     // mqtt subscriptions
-    this.mqttClient.subscribe("Teste2", { qos: 0, rh: true, rap: true })
-    this.mqttClient.subscribe("Teste", { qos: 0 })
+    this.mqttClient.subscribe("localizacoes/persistir", { qos: 2 })
+    this.mqttClient.subscribe("localizacoes/persistida", { qos: 2 })
 
     // When a message arrives, console.log it
     this.mqttClient.on("message", function (topic, message) {

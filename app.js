@@ -11,8 +11,11 @@ mqttHandler.connect()
 
 mqttHandler.mqttClient.on("message", (topic, payload) => {
   switch (topic) {
-    case "Teste":
-      console.log("Vai executar a request")
+    case "localizacoes/persistir":
+      console.log(JSON.stringify(payload))
+      break
+    case "localizacoes/persistida":
+      console.log(JSON.stringify(payload))
       break
     case "Teste2":
       console.log("Agora, vai posta para o front consumir")
@@ -23,7 +26,7 @@ mqttHandler.mqttClient.on("message", (topic, payload) => {
 })
 // Routes
 app.post("/send-mqtt", function (req, res) {
-  mqttHandler.sendMessage(JSON.stringify(req.body))
+  mqttHandler.mqttClient.publish("localizacoes/persistida", "persistiu!")
   res.status(201).send("Message sent to mqtt")
 })
 
