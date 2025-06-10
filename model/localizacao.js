@@ -3,9 +3,7 @@ const { Sequelize, DataTypes, Model } = require("sequelize")
 const config = require("../config/conexao.db")
 const sequelize = config.sequelize
 
-class Localizacao extends Model {
-  constructor() {}
-}
+class Localizacao extends Model {}
 
 Localizacao.init(
   {
@@ -32,11 +30,11 @@ Localizacao.init(
     },
     data_entrada: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
     },
     data_saida: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

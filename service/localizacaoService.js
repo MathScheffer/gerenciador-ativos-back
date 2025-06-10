@@ -13,56 +13,44 @@ exports.criar = async (body, fnCallback) => {
     )
   }
   try {
-    localizacaoRepository.listarPorNomeETag(
-      body.tag_ativo,
-      body.tag_local,
-      (err, localizacoes) => {
-        if (err) {
-          fnCallback({
-            status: 500,
-            message: "Houve um erro ao procurar localizacao.",
-            erro: err,
-          })
-        } else {
-          if (localizacoes.lenght > 0) {
-            fnCallback(null, localizacoes)
-            /*             localizacoes.forEach((localizacao) => {
-              localizacaoRepository.cadastrarSaida(
-                localizacao.id,
-                localizacao.data_entrada
-              )
-            }) */
-          } else {
-            localizacaoRepository.cadastrar(
-              ativo,
-              tag_ativo,
-              local,
-              tag_local,
-              data_entrada,
-              (err, localizacao) => {
-                if (err) {
-                  fnCallback(
-                    {
-                      status: 500,
-                      message: "Houve um erro ao procurar localizacao.",
-                      error: err,
-                    },
-                    null
-                  )
-                  throw error("erro")
-                } else {
-                  fnCallback(null, {
-                    status: 201,
-                    message: JSON.stringify(localizacao),
-                  })
-                }
-                return
-              }
+    const locs = await Localizacao.findAll({
+      where: { tag_ativo: body.tag_ativo, tag_local: body.tag_local },
+    })
+    console.log(locs.length > 0)
+
+    if (locs.length > 0) {
+      console.log(locs.length > 0)
+      fnCallback(null, "Encontrou itens")
+    } else {
+      localizacaoRepository.cadastrarEntrada(
+        "null",
+        body.tag_ativo,
+        "null",
+        body.tag_local,
+        Date.now(),
+        (err, localizacao) => {
+          if (err) {
+            fnCallback(
+              {
+                status: 500,
+                message: "Houve um erro ao cadastrar localização.",
+                error: err,
+              },
+              null
             )
+            throw new Error("erro")
+          } else {
+            fnCallback(null, {
+              status: 201,
+              message: JSON.stringify(localizacao),
+            })
           }
+          return
         }
-      }
-    )
+      )
+      console.log(locs.length > 0)
+      fnCallback(null, "Entrou onde n era")
+    }
   } catch (err) {
     fnCallback({
       status: 500,

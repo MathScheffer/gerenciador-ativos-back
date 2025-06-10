@@ -12,17 +12,18 @@ exports.cadastrarEntrada = async (
   fnCallback
 ) => {
   await sequelize.sync({ alter: true })
-
   try {
-    const localizacao = await Localizacao.create(
+    console.log(`AQUI!!!!!!!!!!!!!!!!!!!\n${data_entrada}\n`)
+    const localizacao = await Localizacao.create({
       ativo,
       tag_ativo,
       local,
       tag_local,
-      data_entrada
-    )
+      data_entrada,
+    })
     fnCallback(null, localizacao)
   } catch (err) {
+    console.log(err)
     fnCallback(err, null)
   }
 }
