@@ -5,7 +5,21 @@ const Ativo = require("./ativo")
 const Local = require("./local")
 const sequelize = config.sequelize
 
-class Localizacao extends Model {}
+class Localizacao extends Model {
+  static associate(models) {
+    // Uma Localização pertence a um Local
+    Localizacao.belongsTo(models.Local, {
+      foreignKey: "tag_local",
+      targetKey: "tag_local", // Coluna na tabela Local que 'tag_local' referencia
+    })
+
+    // Uma Localização pertence a um Ativo
+    Localizacao.belongsTo(models.Ativo, {
+      foreignKey: "tag_ativo",
+      targetKey: "tag_ativo", // Coluna na tabela Ativo que 'tag_ativo' referencia
+    })
+  }
+}
 
 Localizacao.init(
   {

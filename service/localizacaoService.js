@@ -102,3 +102,5 @@ exports.criar = async (body, fnCallback) => {
     })
   }
 }
+
+exports.listar = async (fnCallback) => {}
