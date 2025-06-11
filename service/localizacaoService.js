@@ -2,10 +2,12 @@ const localizacaoRepository = require("../repository/localizacaoRepository")
 const Localizacao = require("../model/localizacao")
 const { sequelize } = require("../config/conexao.db")
 const { Op } = require("sequelize")
+const Ativo = require("../model/ativo")
+const db = require("../model")
 
 exports.criar = async (body, fnCallback) => {
   const saidas = []
-  console.log(`\n\n AQUI!!!!!!!!${JSON.stringify(body)}`)
+  console.log(`\n\n INICIANDO CRIAÇÃO!!!!!!!!${JSON.stringify(body)}`)
   if (!body.tag_ativo || !body.tag_local) {
     fnCallback(
       {
@@ -103,4 +105,13 @@ exports.criar = async (body, fnCallback) => {
   }
 }
 
-exports.listar = async (fnCallback) => {}
+exports.listar = async (fnCallback) => {
+  const lista = await Localizacao.findAll({
+    include: [{ model: db.Ativo }, { model: db.Local }],
+  })
+  console.log(lista)
+  fnCallback(null, {
+    status: 200,
+    resultSet: lista,
+  })
+}

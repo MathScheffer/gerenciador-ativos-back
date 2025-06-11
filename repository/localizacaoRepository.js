@@ -9,7 +9,6 @@ exports.cadastrarEntrada = async (
   data_entrada,
   fnCallback
 ) => {
-  await sequelize.sync({ alter: true })
   try {
     console.log(
       `repository recebeu: \n${tag_local}\n${tag_ativo}\n${data_entrada}`

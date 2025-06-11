@@ -10,7 +10,7 @@ exports.criar = async (req, res) => {
   })
 }
 exports.listar = async (req, res) => {
-  localizacaoService.listar(req.body, (err, localizacao) => {
+  localizacaoService.listar((err, localizacao) => {
     if (err) {
       res.status(err.status).json(err)
     } else {

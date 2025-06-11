@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes, Model } = require("sequelize")
 
 const config = require("../config/conexao.db")
-const Ativo = require("./ativo")
-const Local = require("./local")
+/* const Ativo = require("./ativo")
+const Local = require("./local") */
 const sequelize = config.sequelize
 
 class Localizacao extends Model {
@@ -32,7 +32,7 @@ Localizacao.init(
       type: DataTypes.STRING,
       allowNull: false,
       references: {
-        model: Ativo,
+        model: "Ativo",
         key: "tag_ativo",
       },
     },
@@ -40,7 +40,7 @@ Localizacao.init(
       type: DataTypes.STRING,
       allowNull: false,
       references: {
-        model: Local,
+        model: "Local",
         key: "tag_local",
       },
     },

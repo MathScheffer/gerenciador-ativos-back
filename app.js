@@ -23,7 +23,8 @@ mqttHandler.mqttClient.on("message", (topic, payload) => {
             mqttHandler.mqttClient.publish(
               "localizacoes/persistida",
               JSON.stringify({
-                msg: "nao persistiu!",
+                msg: "Houve um erro ao persistir!",
+                erro: err,
               })
             )
           } else {
