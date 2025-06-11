@@ -5,7 +5,7 @@ exports.criar = async (req, res) => {
     if (err) {
       res.status(err.status).json(err)
     } else {
-      res.json(localizacao)
+      res.status(localizacao.status).json(localizacao)
     }
   })
 }

@@ -4,20 +4,18 @@ const sequelize = conexao.sequelize
 const Localizacao = require("../model/localizacao")
 
 exports.cadastrarEntrada = async (
-  ativo,
   tag_ativo,
-  local,
   tag_local,
   data_entrada,
   fnCallback
 ) => {
   await sequelize.sync({ alter: true })
   try {
-    console.log(`AQUI!!!!!!!!!!!!!!!!!!!\n${data_entrada}\n`)
+    console.log(
+      `repository recebeu: \n${tag_local}\n${tag_ativo}\n${data_entrada}`
+    )
     const localizacao = await Localizacao.create({
-      ativo,
       tag_ativo,
-      local,
       tag_local,
       data_entrada,
     })

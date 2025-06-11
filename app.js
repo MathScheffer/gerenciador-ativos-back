@@ -2,6 +2,8 @@ var express = require("express")
 const cors = require("cors")
 var bodyParser = require("body-parser")
 var app = express()
+const localizacoesService = require("./service/localizacaoService")
+
 var mqttHandler = require("./mqttHandler")
 
 app.use(bodyParser.json())
@@ -11,18 +13,42 @@ var mqttHandler = new mqttHandler()
 mqttHandler.connect()
 
 mqttHandler.mqttClient.on("message", (topic, payload) => {
-  switch (topic) {
-    case "localizacoes/persistir":
-      console.log(JSON.stringify(payload))
-      break
-    case "localizacoes/persistida":
-      console.log(JSON.stringify(payload))
-      break
-    case "Teste2":
-      console.log("Agora, vai posta para o front consumir")
-      break
-    default:
-      console.log("Não foi nenhum dos dois tópicos.")
+  try {
+    const body = JSON.parse(payload.toString())
+    body.data_entrada = Date.now()
+    switch (topic) {
+      case "localizacoes/persistir":
+        localizacoesService.criar(body, (err, localizacao) => {
+          if (err) {
+            mqttHandler.mqttClient.publish(
+              "localizacoes/persistida",
+              JSON.stringify({
+                msg: "nao persistiu!",
+              })
+            )
+          } else {
+            mqttHandler.mqttClient.publish(
+              "localizacoes/persistida",
+              JSON.stringify({
+                message: "Dados persistidos!",
+                body: JSON.stringify(localizacao),
+              })
+            )
+          }
+        })
+        console.log(JSON.parse(payload.toString()))
+        break
+      case "localizacoes/persistida":
+        console.log("uhu")
+        break
+      case "Teste2":
+        console.log("Agora, vai posta para o front consumir")
+        break
+      default:
+        console.log("Não foi nenhum dos dois tópicos.")
+    }
+  } catch (err) {
+    console.log("erro no mqtt")
   }
 })
 // Routes
