@@ -1,10 +1,9 @@
 const express = require("express")
 const rotas = express.Router()
 
-const localizacoesController = require("../controller/localizacoesController.js")
+const localController = require("../controller/localController.js")
 
-rotas.post("/post", localizacoesController.criar)
-rotas.get("/listar", localizacoesController.listar)
-//rotas.get("/", armazenamentoController.listar)
+rotas.post("/", localController.criar)
+rotas.get("/", localController.listar)
 
 module.exports = rotas

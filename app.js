@@ -61,6 +61,12 @@ app.post("/send-mqtt", function (req, res) {
 const localizacoes = require("./rotas/localizacoesRotas")
 app.use("/api/localizacao", localizacoes)
 
+const local = require("./rotas/localRotas")
+app.use("/api/local", local)
+
+const ativo = require("./rotas/ativoRotas")
+app.use("/api/ativo", ativo)
+
 var server = app.listen(3000, function () {
   console.log("app running on port.", server.address().port)
 })

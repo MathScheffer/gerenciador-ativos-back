@@ -3,7 +3,7 @@ const rotas = express.Router()
 
 const localizacoesController = require("../controller/localizacoesController.js")
 
-rotas.post("/post", localizacoesController.criar)
+rotas.post("/", localizacoesController.criar)
 rotas.get("/listar", localizacoesController.listar)
 //rotas.get("/", armazenamentoController.listar)
 
