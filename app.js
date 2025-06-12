@@ -3,16 +3,15 @@ const cors = require("cors")
 var bodyParser = require("body-parser")
 var app = express()
 const localizacoesService = require("./service/localizacaoService")
-
-var mqttHandler = require("./mqttHandler")
+const MqttHandler = require("./mqttHandler")
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors())
 
-var mqttHandler = new mqttHandler()
-mqttHandler.connect()
-
-mqttHandler.mqttClient.on("message", (topic, payload) => {
+const mqttClientInstance = new MqttHandler()
+mqttClientInstance.connect()
+mqttClientInstance.mqttClient.on("message", (topic, payload) => {
   try {
     const body = JSON.parse(payload.toString())
     body.data_entrada = Date.now()
@@ -20,7 +19,7 @@ mqttHandler.mqttClient.on("message", (topic, payload) => {
       case "localizacoes/persistir":
         localizacoesService.criar(body, (err, localizacao) => {
           if (err) {
-            mqttHandler.mqttClient.publish(
+            mqttClientInstance.mqttClient.publish(
               "localizacoes/persistida",
               JSON.stringify({
                 msg: "Houve um erro ao persistir!",
@@ -28,7 +27,7 @@ mqttHandler.mqttClient.on("message", (topic, payload) => {
               })
             )
           } else {
-            mqttHandler.mqttClient.publish(
+            mqttClientInstance.mqttClient.publish(
               "localizacoes/persistida",
               JSON.stringify({
                 message: "Dados persistidos!",
@@ -54,7 +53,7 @@ mqttHandler.mqttClient.on("message", (topic, payload) => {
 })
 // Routes
 app.post("/send-mqtt", function (req, res) {
-  mqttHandler.mqttClient.publish("localizacoes/persistida", "persistiu!")
+  mqttClientInstance.mqttClient.publish("localizacoes/persistida", "persistiu!")
   res.status(201).send("Message sent to mqtt")
 })
 
@@ -64,7 +63,7 @@ app.use("/api/localizacao", localizacoes)
 const local = require("./rotas/localRotas")
 app.use("/api/local", local)
 
-const ativo = require("./rotas/ativoRotas")
+const ativo = require("./rotas/ativoRotas")(mqttClientInstance)
 app.use("/api/ativo", ativo)
 
 var server = app.listen(3000, function () {

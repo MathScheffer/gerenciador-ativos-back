@@ -9,6 +9,7 @@ class MqttHandler {
     this.username = process.env.BROKER_USER // mqtt credentials if these are needed to connect
     this.password = process.env.BROKER_PASSWORD
   }
+
   connect() {
     // Connect mqtt with credentials (in case of needed, otherwise we can omit 2nd param)
     this.mqttClient = mqtt.connect(this.host, {
@@ -48,8 +49,12 @@ class MqttHandler {
   }
 
   // Sends a mqtt message to topic: mytopic
-  sendMessage(message) {
-    this.mqttClient.publish("Teste2", message)
+  sendMessage = async (topic, message) => {
+    await this.mqttClient.publish(topic, message)
+  }
+
+  disconnect = async () => {
+    await this.mqttClient.endAsync()
   }
 }
 
