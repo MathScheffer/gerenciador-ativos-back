@@ -1,5 +1,4 @@
 const { Ativo } = require("../model")
-
 exports.inserir = async (nome, tag_ativo, fnCallback) => {
   try {
     const ativo = await Ativo.create({

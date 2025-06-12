@@ -1,6 +1,5 @@
 const ativoRepository = require("../repository/ativoRepository")
 const db = require("../model")
-
 // MUITO IMPORTANTE: Este módulo DEVE EXPORTAR UMA FUNÇÃO.
 // Essa função recebe a instância do 'mqttHandler' como argumento.
 module.exports = (mqttHandler) => {
