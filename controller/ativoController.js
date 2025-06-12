@@ -18,3 +18,25 @@ exports.listar = async (req, res) => {
     }
   })
 }
+exports.atualizar = async (req, res) => {
+  const id = req.params.id
+
+  ativoService.atualizar(req.body, id, (err, local) => {
+    if (err) {
+      res.status(err.status).json(err)
+    } else {
+      res.status(local.status).json(local)
+    }
+  })
+}
+
+exports.delete = async (req, res) => {
+  const id = req.params.id
+  ativoService.deletar(id, (err, local) => {
+    if (err) {
+      res.status(err.status).json(err)
+    } else {
+      res.status(local.status).json(local)
+    }
+  })
+}
