@@ -14,7 +14,7 @@ exports.listar = async (req, res) => {
     if (err) {
       res.status(err.status).json(err)
     } else {
-      res.status(local.status).json(local)
+      res.status(local.status).json(local.resultSet)
     }
   })
 }

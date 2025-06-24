@@ -18,11 +18,11 @@ module.exports = (mqttClient) => {
       })
     },
     listar: async (req, res) => {
-      ativoService.listar((err, local) => {
+      ativoService.listar((err, ativos) => {
         if (err) {
           res.status(err.status).json(err)
         } else {
-          res.status(local.status).json(local)
+          res.status(ativos.status).json(ativos.resultSet)
         }
       })
     },

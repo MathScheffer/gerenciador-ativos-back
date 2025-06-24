@@ -66,6 +66,10 @@ app.use("/api/local", local)
 const ativo = require("./rotas/ativoRotas")(mqttClientInstance)
 app.use("/api/ativo", ativo)
 
+/**
+ * const usuario = require('./rotas/usuarioRotas')
+ * app.use("/api/usuario", usuario)
+ */
 var server = app.listen(3000, function () {
   console.log("app running on port.", server.address().port)
 })
