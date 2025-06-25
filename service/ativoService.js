@@ -54,10 +54,28 @@ module.exports = (mqttHandler) => {
           status: 500,
           message: "Houve um erro ao listar!",
           erro: err,
-        })
+        }, null)
       }
     },
+    ativoPorId: async(id, fnCallback) => {
+      try{
+        const ativo = await db.Ativo.findOne({where: {'id': parseInt(id)}})
 
+        console.log(ativo)
+
+        fnCallback(null,{
+          status: 200,
+          resultSet: ativo ? ativo : {}
+        })
+      }catch(err) {
+        console.log(err)
+        fnCallback({
+          status: 500,
+          message: "Houve um erro ao buscar por id!",
+          erro: err,
+        }, null)
+      }
+    },
     // Método para atualizar um ativo existente
     atualizar: async (body, id, fnCallback) => {
       if (!id) {

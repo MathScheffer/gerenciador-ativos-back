@@ -1,9 +1,19 @@
 const express = require("express")
-const rotas = express.Router()
 
-const localController = require("../controller/localController.js")
+const LocalController = require("../controller/localController.js")
 
-rotas.post("/", localController.criar)
-rotas.get("/", localController.listar)
+class LocalRotas{
+    constructor(mqttClient) {
+        this.controller = new LocalController(mqttClient)
+        this.rotas = express.Router()
+        this.rotas.post("/", this.controller.criar)
+        this.rotas.get("/", this.controller.listar)
+        this.rotas.get("/:id", this.controller.localPorId)
+        this.rotas.put("/:id", this.controller.editar)
+        this.rotas.delete("/:id", this.controller.deletar)
+    }
 
-module.exports = rotas
+}
+
+
+module.exports = LocalRotas

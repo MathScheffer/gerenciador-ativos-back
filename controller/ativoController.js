@@ -26,6 +26,17 @@ module.exports = (mqttClient) => {
         }
       })
     },
+    ativoPorId: async(req, res) => {
+      const id = req.params.id
+
+      ativoService.ativoPorId(id,(err, ativo) => {
+        if (err) {
+          res.status(err.status).json(err)
+        } else {
+          res.status(ativo.status).json(ativo.resultSet)
+        }
+      })
+    },
     atualizar: async (req, res) => {
       const id = req.params.id
       ativoService.atualizar(req.body, id, (err, local) => {

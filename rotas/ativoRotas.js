@@ -13,6 +13,7 @@ module.exports = (mqttClient) => {
   // Define as rotas HTTP e associa-as aos métodos do controlador
   rotas.post("/", ativoController.criar)
   rotas.get("/", ativoController.listar)
+  rotas.get("/:id", ativoController.ativoPorId)
   rotas.delete("/:id", ativoController.deletar) // <-- Mudei de 'delete' para 'deletar' para consistência
   rotas.put("/:id", ativoController.atualizar)
 
