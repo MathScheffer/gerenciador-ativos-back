@@ -1,7 +1,6 @@
 const { Sequelize } = require("sequelize")
 
 exports.sequelize = new Sequelize(
-  //"postgresql://postgres:P4ssw0rdP0STGR3SS@db.ogrfmpvyjnybliwzlqsl.supabase.co:5432/postgres",
   "postgresql://postgres.ogrfmpvyjnybliwzlqsl:P4ssw0rdP0STGR3SS@aws-0-sa-east-1.pooler.supabase.com:5432/postgres",
   {
     dialect: "postgres",    
