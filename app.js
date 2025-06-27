@@ -36,7 +36,7 @@ mqttClientInstance.mqttClient.on("message", (topic, payload) => {
             )
           }
         })
-        console.log(JSON.parse(payload.toString()))
+        //console.log(JSON.parse(payload.toString()))
         break
       case "localizacoes/persistida":
         console.log("uhu")
