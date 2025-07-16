@@ -10,9 +10,6 @@ exports.cadastrarEntrada = async (
   fnCallback
 ) => {
   try {
-    console.log(
-      `repository recebeu: \n${tag_local}\n${tag_ativo}\n${data_entrada}`
-    )
     const localizacao = await Localizacao.create({
       tag_ativo,
       tag_local,
@@ -20,7 +17,6 @@ exports.cadastrarEntrada = async (
     })
     fnCallback(null, localizacao)
   } catch (err) {
-    console.log(err)
     fnCallback(err, null)
   }
 }

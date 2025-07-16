@@ -52,7 +52,6 @@ exports.criar = async (body, fnCallback) => {
 
       return
     }
-    console.log(`\n\n PASSOU DO RETURN!!!!!!!!!!!!!!!!!!! \n\n`)
     const registrosAtivos = await Localizacao.findAll({
       where: {
         [Op.and]: [{ tag_ativo: body.tag_ativo }, { data_saida: null }],
@@ -60,7 +59,6 @@ exports.criar = async (body, fnCallback) => {
     })
 
     if (registrosAtivos.length > 0) {
-      console.log(`\n\n\nEntrou no REGISTROATIVOS\n\n\n`)
       for (const loc of registrosAtivos) {
         loc.data_saida = Date.now()
         await loc.save()
@@ -71,13 +69,25 @@ exports.criar = async (body, fnCallback) => {
         })
       }
     }
-    console.log(`\n\n\nVAI USAR O CADASTRAR ENTRADA\n\n\n`)
     localizacaoRepository.cadastrarEntrada(
       body.tag_ativo,
       body.tag_local,
       Date.now(),
       (err, localizacao) => {
         if (err) {
+          jsonError = JSON.parse(JSON.stringify(err)).original
+
+          if (jsonError.code == "23503") {
+            fnCallback(
+              {
+                status: 422,
+                message: jsonError.detail,
+              },
+              null
+            )
+            return
+          }
+
           fnCallback(
             {
               status: 500,

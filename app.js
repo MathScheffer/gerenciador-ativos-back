@@ -19,8 +19,9 @@ mqttClientInstance.mqttClient.on("message", (topic, payload) => {
       case "localizacoes/persistir":
         localizacoesService.criar(body, (err, localizacao) => {
           if (err) {
+            console.log(err)
             mqttClientInstance.mqttClient.publish(
-              "localizacoes/persistir",
+              "localizacoes/erros",
               JSON.stringify({
                 msg: "Houve um erro ao persistir!",
                 erro: err,
@@ -48,7 +49,7 @@ mqttClientInstance.mqttClient.on("message", (topic, payload) => {
         console.log("Não foi nenhum dos dois tópicos.")
     }
   } catch (err) {
-    console.log("erro no mqtt")
+    console.log(err)
   }
 })
 // Routes
@@ -67,8 +68,7 @@ app.use("/api/local", local.rotas)
 const ativo = require("./rotas/ativoRotas")(mqttClientInstance)
 app.use("/api/ativo", ativo)
 
-
-const Usuario = require('./rotas/usuarioRotas')
+const Usuario = require("./rotas/usuarioRotas")
 const usuario = new Usuario()
 app.use("/api/usuario", usuario.rotas)
 
