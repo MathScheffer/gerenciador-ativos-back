@@ -98,7 +98,7 @@ exports.criar = async (body, fnCallback) => {
           )
         } else {
           fnCallback(null, {
-            status: 201,
+            status: 200,
             message: localizacao,
             saidas: saidas,
           })
